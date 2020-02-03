@@ -1,0 +1,15 @@
+<div>
+    <ul class="chatbox" #chatbox>
+        <li *ngFor="let message of messages">
+            <p class="nickname">{{message.nickname}}</p>
+            <p class="message">{{message.message}}</p>
+        </li>
+    </ul>
+
+    <form [formGroup]="messageForm" (ngSubmit)="sendMessage(messageForm.value.message)">
+        <div style="display:flex;margin: 0 25px;">
+            <input formControlName="message" class="chat-input" type="text" placeholder="Chat..." style="flex-grow: 1;">
+            <button class="send-button" (disabled)="!messageForm.valid">Send</button>
+        </div>
+    </form>
+</div>

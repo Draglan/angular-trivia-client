@@ -1,0 +1,9 @@
+<div class="question-history-container">
+    <ul class="question-history-list">
+        <li class="question-history-item" *ngFor="let question of questions.reverse()" [ngClass]="{'correct': question.wasCorrect, 'incorrect': !question.wasCorrect}">
+            {{question.question.question}}
+            <br>
+            Correct answer: <strong>{{question.question.answers[question.question.correctAnswerIndex]}}</strong>
+        </li>
+    </ul>
+</div>

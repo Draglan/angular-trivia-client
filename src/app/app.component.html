@@ -1,0 +1,15 @@
+<div class="room-view">
+  <div style="display:flex;height:100%;align-items: stretch;">
+    <div id="col1">
+      <app-room-list #roomlist></app-room-list>
+    </div>
+
+    <div id="col2" style="flex-grow:1;">
+      <router-outlet></router-outlet>
+    </div>
+
+    <div id="col3">
+      <app-user-list></app-user-list>
+    </div>
+  </div>
+</div>

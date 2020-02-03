@@ -1,0 +1,4 @@
+<ul [ngClass]="{'': !isHidden(), 'list-shrunk': isHidden()}">
+    <li class="list-header">Rooms</li>
+    <li *ngFor="let room of rooms | async"><a routerLink="/r/{{room}}">{{room}}</a></li>
+</ul>

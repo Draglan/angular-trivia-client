@@ -1,0 +1,26 @@
+Three things I'm worried about:
+ (1) The client currently won't be able to represent the state correctly in all situations
+   (i.e. update the route if the server decides it wants us in another room)
+ (2) Extending it later to add:
+   - custom nicknames
+   - Room settings (category, difficulty, etc)
+   - Room creation menu
+   - Logging in to save stats and guest mode
+ (3) Extending the UI
+   - More nested UI options = more complicated representation of state
+   - Not too with CSS, so doing it in a way that is scalable and simple is hard
+
+Some of these changes obviously need additions on the server.
+
+---
+
+To fix problem (1):
+ - Have a global listener to the server. When state changes occur (enter game room, leave game room, disconnect), update the route automatically.
+
+To fix problem (2):
+ - As the server is expanded to provide these options, new events will need to be added to
+   keep track of the state better. It may also be helpful to add a 'join lobby' and/or 'leave lobby'
+   event(s) to make keeping track of state a bit easier.
+
+To fix problem (3):
+ - No goddamn idea, I suck at angular at the moment

@@ -1,0 +1,24 @@
+.question-history-container {
+    height: 200px;
+    overflow-y: auto;
+}
+
+.question-history-list {
+    list-style-type: none;
+    padding-left: 0;
+    text-align: center;
+}
+
+.correct, .incorrect {
+    border-radius: 10px;
+}
+
+.correct {
+    background-color: lightgreen;
+    border: 1px solid green;
+}
+
+.incorrect {
+    background-color: pink;
+    border: 1px solid red;
+}

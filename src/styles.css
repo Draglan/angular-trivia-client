@@ -1,0 +1,46 @@
+/* You can add global styles to this file, and also import other style files */
+button, .lobby-link {
+    background-color: #8860d0;
+    transition: background-color 333ms;
+
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+
+    box-shadow: 0 0 1px #4e2c8f;
+}
+
+.answer-button, .lobby-link {
+    font-size: 1.75em;
+}
+
+button:hover:not(:disabled), .lobby-link:hover {
+    background-color: #6d5894;
+}
+
+button:focus {
+    outline: 0;
+}
+
+button:disabled, .answer-button:disabled {
+    color: #b6a7d1;
+}
+
+.lobby-link {
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: 1.0em;
+    color: white;
+    opacity: 50%;
+    transition: opacity 333ms;
+}
+
+.lobby-link:hover {
+    text-decoration: none;
+    color: white;
+    opacity: 100%;
+}

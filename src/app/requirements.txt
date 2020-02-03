@@ -1,0 +1,14 @@
+The client needs to be able to:
+
+Room stuff:
+ - Join/leave rooms
+ - Know when rooms are made and destroyed
+ - Get the users in a room
+ - Know when users join/leave a room
+ - Get room list
+
+Question stuff:
+ - Receive questions and answers
+ - Select answers to questions
+ - Keep track of question history
+ - Keep track of seconds left

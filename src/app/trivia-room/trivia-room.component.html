@@ -1,0 +1,14 @@
+<div style="padding:0 1in; text-align:center">
+    <div *ngIf="(question$ | async) as q">
+        <h1>{{q.question}}</h1>
+        <p class="seconds-timer" *ngIf="(secondsLeft$ | async) as secondsLeft">{{secondsLeft}} seconds left</p>
+        <button [ngClass]="{'answer-button': true, 'selected-answer': selectedAnswerIndex === i}"
+            *ngFor="let answer of q.answers; let i = index" (click)="selectAnswer(i)" [disabled]="selectedAnswerIndex != -1 && i != selectedAnswerIndex">{{answer}}</button>
+    </div>
+    <hr>
+
+    <!--<app-question-history #questionHistory></app-question-history>-->
+    <app-chat></app-chat>
+
+    <a class="lobby-link" routerLink="/lobby">Back</a>
+</div>

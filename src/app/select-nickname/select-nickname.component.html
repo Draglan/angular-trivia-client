@@ -1,0 +1,10 @@
+<div class="popup-form">
+    <div class="form-card">
+        <form [formGroup]="selectNicknameForm" (ngSubmit)="onSubmit()">
+            <label for="nickname">Nickname:</label>
+            <input formControlName="nickname" type="text" class="form-control" placeholder="Enter a nickname...">
+            <div *ngIf="errorMessage && errorMessage.length > 0" class="alert alert-danger">{{errorMessage}}</div>
+            <button class="answer-button">Enter</button>
+        </form>
+    </div>
+</div>
