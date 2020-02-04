@@ -13,6 +13,7 @@ import { ChatComponent } from './chat/chat.component';
 import { QuestionHistoryComponent } from './question-history/question-history.component';
 import { SelectNicknameComponent } from './select-nickname/select-nickname.component';
 import { RegistrationService } from './registration.service';
+import { CreateRoomComponent } from './create-room/create-room.component';
 
 // Tells the socket.io service where to connect.
 const socketIoConfig: SocketIoConfig = 
@@ -30,7 +31,8 @@ const socketIoConfig: SocketIoConfig =
     TriviaRoomComponent,
     ChatComponent,
     QuestionHistoryComponent,
-    SelectNicknameComponent
+    SelectNicknameComponent,
+    CreateRoomComponent
   ],
   imports: [
     BrowserModule,

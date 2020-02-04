@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { TriviaRoomComponent } from './trivia-room/trivia-room.component';
 import { SelectNicknameComponent } from './select-nickname/select-nickname.component';
+import { CreateRoomComponent } from './create-room/create-room.component';
 
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
   {path: 'lobby', component: LobbyComponent},
   {path: 'r/:id', component: TriviaRoomComponent},
   {path: 'nickname', component: SelectNicknameComponent},
+  {path: 'test-create-room', component: CreateRoomComponent},
   {path: '**', redirectTo: 'lobby'}
 ];
 

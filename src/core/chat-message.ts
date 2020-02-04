@@ -1,11 +1,21 @@
-export class ChatMessage
+export enum MessageType
 {
-    nickname: string;
-    message: string;
+    Message = 1,
+    QuestionCorrect,
+    QuestionIncorrect,
+    Log
+}
 
-    constructor(nickname: string, message: string)
+export class ChatMessage
+{   
+    header: string;
+    message: string;
+    type: MessageType;
+
+    constructor(header: string, message: string, type: MessageType)
     {
-        this.nickname = nickname;
+        this.header  = header;
         this.message = message;
+        this.type    = type;
     }
 }

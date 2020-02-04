@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Observable, of, Subject, Subscription, BehaviorSubject } from 'rxjs';
 import { merge, switchMap } from 'rxjs/operators';
 import { Router, NavigationEnd, ActivatedRoute, NavigationStart, DefaultUrlSerializer } from '@angular/router';
+import { RoomConfiguration } from '../core/room-configuration';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RoomService 
+export class RoomService implements OnDestroy
 {
   userList       : Observable<string[]>   = this.socket.fromEvent<string[]>('user list');
   userJoined     : Observable<string>     = this.socket.fromEvent<string>  ('user joined');
@@ -27,6 +28,7 @@ export class RoomService
 
   private allUsers: string[] = [];
   private allRooms: string[] = [];
+  private subscriptions: Subscription[] = [];
   
   constructor
   (
@@ -37,64 +39,70 @@ export class RoomService
   { 
     // Set up subscriptions for this.users:
     //
-    this.userList.subscribe
+    this.subscriptions.push(this.userList.subscribe
     (
       (users: string[]) => 
       {
         this.allUsers = users; 
         this.users.next(this.allUsers)
       }
-    );
+    ));
 
-    this.userJoined.subscribe
+    this.subscriptions.push(this.userJoined.subscribe
     (
       (user: string) => 
       {
         this.allUsers.push(user); 
         this.users.next(this.allUsers)
       }
-    );
+    ));
     
-    this.userLeft.subscribe
+    this.subscriptions.push(this.userLeft.subscribe
     (
       (user: string) =>
       {
         this.allUsers.splice(this.allUsers.findIndex(u => u === user), 1);
         this.users.next(this.allUsers);
       }
-    );
+    ));
 
     // Set up subscriptions for this.rooms:
     //
-    this.roomList.subscribe
+    this.subscriptions.push(this.roomList.subscribe
     (
       (rooms: string[]) => 
       {
         this.allRooms = rooms;
         this.rooms.next(this.allRooms);
       } 
-    );
+    ));
 
-    this.newRoom.subscribe
+    this.subscriptions.push(this.newRoom.subscribe
     (
       (newRoom: string) =>
       {
         this.allRooms.push(newRoom);
         this.rooms.next(this.allRooms);
       }
-    );
+    ));
 
-    this.deleteRoom.subscribe
+    this.subscriptions.push(this.deleteRoom.subscribe
     (
       (deletedRoom: string) =>
       {
         this.allRooms.splice( this.allRooms.findIndex(r => r === deletedRoom), 1 );
         this.rooms.next(this.allRooms);
       }
-    );
+    ));
 
-    this.enteredGameRoom.subscribe( (roomId: string) => this.router.navigateByUrl(`/r/${roomId}`) );
-    this.leftGameRoom.subscribe( _ => this.router.navigateByUrl('/lobby') );
+    this.subscriptions.push(this.enteredGameRoom.subscribe( (roomId: string) => this.router.navigateByUrl(`/r/${roomId}`) ));
+    this.subscriptions.push(this.leftGameRoom.subscribe( _ => this.router.navigateByUrl('/lobby') ));
+  }
+
+  // Clean up subscriptions when done.
+  ngOnDestroy()
+  {
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   // Tell the server we want to join the room with the given id.
@@ -110,8 +118,8 @@ export class RoomService
   }
 
   // Tell the server we want to create a new room.
-  createRoom()
+  createRoom(category: number = -1, difficulty: string = '')
   {
-    this.socket.emit('create room');
+    this.socket.emit('create room', new RoomConfiguration(category, difficulty));
   }
 }

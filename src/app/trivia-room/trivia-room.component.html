@@ -1,7 +1,11 @@
 <div style="padding:0 1in; text-align:center">
     <div *ngIf="(question$ | async) as q">
         <h1>{{q.question}}</h1>
-        <p class="seconds-timer" *ngIf="(secondsLeft$ | async) as secondsLeft">{{secondsLeft}} seconds left</p>
+        <div class="info-box" *ngIf="(secondsLeft$ | async) as secondsLeft">
+            <p>{{secondsLeft}} seconds left</p>
+            <p>Category: {{q.category | titlecase}}</p>
+            <p>Difficulty: {{q.difficulty | titlecase}}</p>
+        </div>
         <button [ngClass]="{'answer-button': true, 'selected-answer': selectedAnswerIndex === i}"
             *ngFor="let answer of q.answers; let i = index" (click)="selectAnswer(i)" [disabled]="selectedAnswerIndex != -1 && i != selectedAnswerIndex">{{answer}}</button>
     </div>

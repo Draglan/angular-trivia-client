@@ -1,15 +1,36 @@
 <div>
     <ul class="chatbox" #chatbox>
-        <li *ngFor="let message of messages">
-            <p class="nickname">{{message.nickname}}</p>
-            <p class="message">{{message.message}}</p>
+        <li *ngFor="let message of messages" [ngClass]="{'': true, 'question-correct': message.type === MessageType.QuestionCorrect, 'question-incorrect': message.type === MessageType.QuestionIncorrect}">
+            <ng-container *ngIf="message.type === MessageType.Message; then chatMessage"></ng-container>
+            <ng-container *ngIf="message.type === MessageType.QuestionCorrect; then questionCorrect"></ng-container>
+            <ng-container *ngIf="message.type === MessageType.QuestionIncorrect; then questionIncorrect"></ng-container>
+            <ng-container *ngIf="message.type === MessageType.Log; then log"></ng-container>
+
+            <ng-template #chatMessage>
+                <p class="header">{{message.header}}</p>
+                <p class="message">{{message.message}}</p>
+            </ng-template>
+
+            <ng-template #questionCorrect>
+                <p class="header">{{message.header}}</p>
+                <p class="message">{{message.message}}</p>
+            </ng-template>
+
+            <ng-template #questionIncorrect>
+                <p class="header">{{message.header}}</p>
+                <p class="message">{{message.message}}</p>
+            </ng-template>
+
+            <ng-template #log>
+                <p class="header log-message">{{message.header}}</p>
+            </ng-template>
         </li>
     </ul>
 
     <form [formGroup]="messageForm" (ngSubmit)="sendMessage(messageForm.value.message)">
         <div style="display:flex;margin: 0 25px;">
             <input formControlName="message" class="chat-input" type="text" placeholder="Chat..." style="flex-grow: 1;">
-            <button class="send-button" (disabled)="!messageForm.valid">Send</button>
+            <button class="send-button" [disabled]="!messageForm.valid">Send</button>
         </div>
     </form>
 </div>
