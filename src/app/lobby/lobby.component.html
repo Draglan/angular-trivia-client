@@ -1,9 +1,12 @@
 <div class="lobby-view">
     <h1>Lobby</h1>
     <p class="lead" *ngIf="(roomService.rooms | async) as rooms">{{rooms.length}} active games</p>
-    <button class="answer-button" (click)="roomService.createRoom()">Create Room</button>
+    <button class="answer-button" (click)="showNewRoomForm()">Create Room</button>
 
     <app-chat></app-chat>
 
-    <button (click)="showNewRoomForm()">test new room</button>
+    <div class="popup-form" #formdisplay>
+        <app-create-room #createRoomForm></app-create-room>
+        <button class="popup-x-button" (click)="hideNewRoomForm()">X</button>
+    </div>
 </div>

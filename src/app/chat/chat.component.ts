@@ -72,24 +72,11 @@ export class ChatComponent implements OnInit {
         this.messages.push(new ChatMessage(`${nickname} left the room.`, '', MessageType.Log))
       }
     ));
-
-    // Notify the user when they get a question wrong or right.
-    this.subscriptions.push(this.questionService.wasCorrect.subscribe
-    (
-      (result) =>
-      {
-        let msg = `Correct answer: ${this.currentQuestion.answers[this.currentQuestion.correctAnswerIndex]}`;
-
-        if (result)
-          this.messages.push(new ChatMessage(this.currentQuestion.question, msg, MessageType.QuestionCorrect));
-        else
-          this.messages.push(new ChatMessage(this.currentQuestion.question, msg, MessageType.QuestionIncorrect));
-      }
-    ));
   }
 
   ngOnDestroy()
   {
+    // Release all of our subscriptions when the component dies.
     this.subscriptions.forEach(s => s.unsubscribe());
   }
 

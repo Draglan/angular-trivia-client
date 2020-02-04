@@ -14,6 +14,8 @@ import { QuestionHistoryComponent } from './question-history/question-history.co
 import { SelectNicknameComponent } from './select-nickname/select-nickname.component';
 import { RegistrationService } from './registration.service';
 import { CreateRoomComponent } from './create-room/create-room.component';
+import { DisconnectComponent } from './disconnect/disconnect.component';
+import { MaxLengthPipe } from '../core/max-length-pipe';
 
 // Tells the socket.io service where to connect.
 const socketIoConfig: SocketIoConfig = 
@@ -32,7 +34,9 @@ const socketIoConfig: SocketIoConfig =
     ChatComponent,
     QuestionHistoryComponent,
     SelectNicknameComponent,
-    CreateRoomComponent
+    CreateRoomComponent,
+    DisconnectComponent,
+    MaxLengthPipe
   ],
   imports: [
     BrowserModule,

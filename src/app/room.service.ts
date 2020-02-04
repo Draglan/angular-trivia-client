@@ -4,30 +4,36 @@ import { Observable, of, Subject, Subscription, BehaviorSubject } from 'rxjs';
 import { merge, switchMap } from 'rxjs/operators';
 import { Router, NavigationEnd, ActivatedRoute, NavigationStart, DefaultUrlSerializer } from '@angular/router';
 import { RoomConfiguration } from '../core/room-configuration';
+import { RoomInformation } from '../core/room-info';
+import { UserStatistics } from '../core/user-statistics';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoomService implements OnDestroy
 {
-  userList       : Observable<string[]>   = this.socket.fromEvent<string[]>('user list');
-  userJoined     : Observable<string>     = this.socket.fromEvent<string>  ('user joined');
-  userLeft       : Observable<string>     = this.socket.fromEvent<string>  ('user left');
+  userList       : Observable<string[]>            = this.socket.fromEvent<string[]>         ('user list');
+  userJoined     : Observable<string>              = this.socket.fromEvent<string>           ('user joined');
+  userLeft       : Observable<string>              = this.socket.fromEvent<string>           ('user left');
+  setUserStats   : Observable<UserStatistics[]>    = this.socket.fromEvent<UserStatistics[]> ('set user stats');
 
-  enteredGameRoom: Observable<string>     = this.socket.fromEvent<string>  ('entered game room');
-  leftGameRoom   : Observable<any>        = this.socket.fromEvent<any>     ('left game room');
-  roomList       : Observable<string[]>   = this.socket.fromEvent<string[]>('room list');
-  newRoom        : Observable<string>     = this.socket.fromEvent<string>  ('new room');
-  deleteRoom     : Observable<string>     = this.socket.fromEvent<string>  ('delete room');
+  enteredLobby   : Observable<any>                 = this.socket.fromEvent<any>              ('entered lobby');
+  leftLobby      : Observable<any>                 = this.socket.fromEvent<any>              ('left lobby');
+  enteredGameRoom: Observable<string>              = this.socket.fromEvent<string>           ('entered game room');
+  leftGameRoom   : Observable<any>                 = this.socket.fromEvent<any>              ('left game room');
+  roomList       : Observable<RoomInformation[]>   = this.socket.fromEvent<RoomInformation[]>('room list');
+  newRoom        : Observable<RoomInformation>     = this.socket.fromEvent<RoomInformation>  ('new room');
+  deleteRoom     : Observable<RoomInformation>     = this.socket.fromEvent<RoomInformation>  ('delete room');
+  updateRoom     : Observable<RoomInformation>     = this.socket.fromEvent<RoomInformation>  ('update room');
 
   // Subscribe to this to get a stream of all of the users in the current room.
   users: Subject<string[]> = new BehaviorSubject<string[]>([]);
 
   // Subscribe to this to get a stream of all of the rooms. Only received when in the lobby.
-  rooms: Subject<string[]> = new BehaviorSubject<string[]>([]);
+  rooms: Subject<RoomInformation[]> = new BehaviorSubject<RoomInformation[]>([]);
 
   private allUsers: string[] = [];
-  private allRooms: string[] = [];
+  private allRooms: RoomInformation[] = [];
   private subscriptions: Subscription[] = [];
   
   constructor
@@ -70,7 +76,7 @@ export class RoomService implements OnDestroy
     //
     this.subscriptions.push(this.roomList.subscribe
     (
-      (rooms: string[]) => 
+      (rooms: RoomInformation[]) => 
       {
         this.allRooms = rooms;
         this.rooms.next(this.allRooms);
@@ -79,7 +85,7 @@ export class RoomService implements OnDestroy
 
     this.subscriptions.push(this.newRoom.subscribe
     (
-      (newRoom: string) =>
+      (newRoom: RoomInformation) =>
       {
         this.allRooms.push(newRoom);
         this.rooms.next(this.allRooms);
@@ -88,15 +94,32 @@ export class RoomService implements OnDestroy
 
     this.subscriptions.push(this.deleteRoom.subscribe
     (
-      (deletedRoom: string) =>
+      (deletedRoom: RoomInformation) =>
       {
-        this.allRooms.splice( this.allRooms.findIndex(r => r === deletedRoom), 1 );
+        this.allRooms.splice( this.allRooms.findIndex(r => r.id === deletedRoom.id), 1 );
+        this.rooms.next(this.allRooms);
+      }
+    ));
+
+    this.subscriptions.push(this.updateRoom.subscribe
+    (
+      (updatedRoom: RoomInformation) =>
+      {
+        let room = this.allRooms.find(r => r.id === updatedRoom.id);
+        if (room != undefined)
+        {
+          room.categoryName = updatedRoom.categoryName;
+          room.difficulty   = updatedRoom.difficulty;
+          room.name         = updatedRoom.name;
+          room.playerCount  = updatedRoom.playerCount;
+        }
+
         this.rooms.next(this.allRooms);
       }
     ));
 
     this.subscriptions.push(this.enteredGameRoom.subscribe( (roomId: string) => this.router.navigateByUrl(`/r/${roomId}`) ));
-    this.subscriptions.push(this.leftGameRoom.subscribe( _ => this.router.navigateByUrl('/lobby') ));
+    this.subscriptions.push(this.enteredLobby.subscribe( _ => this.router.navigateByUrl('/lobby') ));
   }
 
   // Clean up subscriptions when done.
@@ -118,8 +141,8 @@ export class RoomService implements OnDestroy
   }
 
   // Tell the server we want to create a new room.
-  createRoom(category: number = -1, difficulty: string = '')
+  createRoom(name: string, categoryId: number = null, difficulty: string = null)
   {
-    this.socket.emit('create room', new RoomConfiguration(category, difficulty));
+    this.socket.emit('create room', {name: name, categoryId: categoryId, difficulty: difficulty});
   }
 }

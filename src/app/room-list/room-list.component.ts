@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RoomService } from '../room.service';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { RoomInformation } from '../../core/room-info';
 
 @Component({
   selector: 'app-room-list',
@@ -10,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class RoomListComponent implements OnInit 
 {
-  rooms: Observable<string[]>;
+  rooms: Observable<RoomInformation[]>;
 
   private hidden: boolean = false;
 
@@ -29,8 +30,7 @@ export class RoomListComponent implements OnInit
   ngOnInit() 
   {
     this.rooms = this.roomService.rooms;
-    this.roomService.enteredGameRoom.subscribe(_ => this.hide());
-    this.roomService.leftGameRoom.subscribe(_ => this.show());
+    this.roomService.enteredLobby.subscribe(_ => this.show());
+    this.roomService.leftLobby.subscribe(_ => this.hide());
   }
-
 }

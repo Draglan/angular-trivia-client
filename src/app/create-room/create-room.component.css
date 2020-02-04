@@ -1,8 +1,12 @@
-form {
+.create-room-form {
+    position: relative;
     background-color: white;
+    color: black;
     text-align: center;
     max-width: 320px;
     padding: 16px;
     border-radius: 4px;
     box-shadow: 1px 1px 4px gray;
+    margin: auto;
+    transform: translateY(calc(50vh - 50%));
 }

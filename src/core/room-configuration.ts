@@ -1,12 +1,12 @@
 // The rules of a room on the server.
 export class RoomConfiguration
 {
-    category: number;   // -1 if no category
-    difficulty: string; // '' if no set difficulty
+    categoryId: number;   // null if no category
+    difficulty: string;   // null if no set difficulty
 
-    constructor(category: number = -1, difficulty: string = '')
+    constructor(categoryId: number = null, difficulty: string = null)
     {
-        this.category   = category;
+        this.categoryId = categoryId;
         this.difficulty = difficulty;
     }
 }

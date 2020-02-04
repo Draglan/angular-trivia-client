@@ -6,6 +6,8 @@ import { TriviaQuestion } from '../../core/trivia-question';
 import { QuestionHistoryComponent } from '../question-history/question-history.component';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ChatComponent } from '../chat/chat.component';
+import { ChatMessage, MessageType } from '../../core/chat-message';
 
 @Component({
   selector: 'app-trivia-room',
@@ -13,8 +15,8 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./trivia-room.component.css']
 })
 export class TriviaRoomComponent implements OnInit {
-  @ViewChild(QuestionHistoryComponent, {static: false})
-  questionHistory: QuestionHistoryComponent;
+  @ViewChild('chatbox', {static: false})
+  chatbox: ChatComponent;
 
   id: string;
   question$: Observable<TriviaQuestion>;
@@ -49,9 +51,9 @@ export class TriviaRoomComponent implements OnInit {
           // answers, category, and difficulty strings.
           // (By ampersand-encoded, I mean like '&amp;')
           //
-          q.question   = this.decodeHTMLText(q.question);
-          q.category   = this.decodeHTMLText(q.category);
-          q.difficulty = this.decodeHTMLText(q.difficulty);
+          q.question     = this.decodeHTMLText(q.question);
+          q.categoryName = this.decodeHTMLText(q.categoryName);
+          q.difficulty   = this.decodeHTMLText(q.difficulty);
 
           for (let i=0; i<q.answers.length; ++i)
           {
@@ -73,12 +75,31 @@ export class TriviaRoomComponent implements OnInit {
     (
       (q) => 
       {
+        // Add the result of the question to the chatbox.
+        let msg = `Correct answer: ${this.currentQuestion.answers[this.currentQuestion.correctAnswerIndex]}`;
+        msg    += ` (You chose: ${this.currentQuestion.answers[this.selectedAnswerIndex] || 'No selection'})`;
+
+        if (q)
+          this.chatbox.messages.push(new ChatMessage(this.currentQuestion.question, msg, MessageType.QuestionCorrect));
+        else
+          this.chatbox.messages.push(new ChatMessage(this.currentQuestion.question, msg, MessageType.QuestionIncorrect));
+
+        // Unselect the answer.
         this.selectedAnswerIndex = -1;
-        //this.questionHistory.addQuestion(this.currentQuestion, q);
       }
     );
   }
 
+  ngOnDestroy()
+  {
+    // When the Trivia Room component is destroyed, tell the server
+    // that we want to leave this room.
+    this.roomService.leaveRoom();
+  }
+
+  // Select the answer with the given index. For example,
+  // selecting 0 means the user selected the first available
+  // answer.
   selectAnswer(index: number)
   {
     if (this.selectedAnswerIndex === -1)
@@ -88,6 +109,8 @@ export class TriviaRoomComponent implements OnInit {
     }
   }
 
+  // Translate ampersand-encoded text into regular text.
+  // (I.e. '&lt;' becomes '<')
   private decodeHTMLText(text: string)
   {
     let parser = new DOMParser();

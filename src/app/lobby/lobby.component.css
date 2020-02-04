@@ -6,3 +6,25 @@
 h1 {
     font-size: 4.0em;
 }
+
+.popup-form {
+    text-align: left;
+    position: absolute;
+    display: none;
+    width: 100vw;
+    height:100vh;
+    background-color: rgba(0,0,0,0.5);
+    top: 0;
+    left: 0;
+}
+
+.popup-x-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+}
+
+.popup-x-button:hover {
+    background-color: darkred;
+}

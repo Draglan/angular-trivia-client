@@ -10,15 +10,22 @@ import { SelectNicknameComponent } from './select-nickname/select-nickname.compo
 export class RegistrationService {
 
   needNickname: Observable<any> = this.socket.fromEvent<any>('need nickname');
+  disconnect: Observable<any>   = this.socket.fromEvent<any>('disconnect');
+  connection: Observable<any>   = this.socket.fromEvent<any>('connection');
+
+  private nickname: string = '';
 
   constructor(private socket: Socket, private router: Router, private activeRoute: ActivatedRoute)
   { 
-    this.needNickname.subscribe(
+    this.needNickname.subscribe
+    (
       _ =>
       {
         this.router.navigateByUrl('/nickname');
       }
     );
+
+    this.disconnect.subscribe(() => this.router.navigateByUrl('/disconnect'));
   }
 
   // Tells the server to give us the given nickname.
@@ -29,6 +36,7 @@ export class RegistrationService {
   setNickname(nickname: string): Promise<string>
   {
     this.socket.emit('set nickname', nickname);
+    this.nickname = nickname;
 
     let promises = [
       this.socket.fromOneTimeEvent<string>('good nickname'   ).then(() => 'good nickname'),
@@ -37,5 +45,11 @@ export class RegistrationService {
     ];
 
     return Promise.race<string>(promises);
+  }
+
+  // Return the nickname of the user.
+  getNickname(): string
+  {
+    return this.nickname;
   }
 }

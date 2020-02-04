@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { RoomListComponent } from '../room-list/room-list.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RoomService } from '../room.service';
+import { CreateRoomComponent } from '../create-room/create-room.component';
 
 @Component({
   selector: 'app-lobby',
@@ -10,6 +11,12 @@ import { RoomService } from '../room.service';
 })
 export class LobbyComponent implements OnInit 
 { 
+  @ViewChild('createRoomForm', {static: false})
+  popupForm: CreateRoomComponent;
+  
+  @ViewChild('formdisplay', {static: false})
+  formDisplay: ElementRef;
+
   constructor
   (
     private roomService: RoomService,
@@ -20,14 +27,27 @@ export class LobbyComponent implements OnInit
 
   ngOnInit()
   {
-    // When we enter the lobby, leave whatever room we were in before.
-    // If we are just logging in, we'll already be in the lobby; that's okay
-    // since the server doesn't do anything if we try to leave the lobby.
-    this.roomService.leaveRoom();
+    document.addEventListener
+    (
+      'keyup',
+      (event) =>
+      {
+        if (event && event.keyCode === 27 && this.formDisplay.nativeElement.style.display != 'none')
+        {
+          this.hideNewRoomForm();
+        }
+      }
+    );
   }
 
   showNewRoomForm()
   {
-    this.router.navigateByUrl('/test-create-room');
+    this.formDisplay.nativeElement.style.display = 'inherit';
+  }
+
+  hideNewRoomForm()
+  {
+    this.popupForm.createRoomForm.reset();
+    this.formDisplay.nativeElement.style.display = 'none';
   }
 }

@@ -1,20 +1,21 @@
-<form [formGroup]="createRoomForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="createRoomForm" (ngSubmit)="onSubmit()" class="create-room-form">
+    <h1>Create Room</h1>
     <label for="name">Room Name:</label>
     <input type="text" formControlName="name" class="form-control">
 
     <label for="category">Select Category:</label>
     <select formControlName="category" class="form-control">
-        <option value="any" [selected]="true">Any</option>
+        <option value="any">Any</option>
         <option *ngFor="let category of questions.categories | async" [value]="category.id">{{category.name}}</option>
     </select>
 
     <label for="difficulty">Select Difficulty:</label>
     <select formControlName="difficulty" class="form-control">
-        <option value="any" [selected]="true">Any</option>
+        <option value="any">Any</option>
         <option value="easy">Easy</option>
         <option value="medium">Medium</option>
         <option value="hard">Hard</option>
     </select>
 
-    <button type="submit" (disabled)="!createRoomForm.valid">Create Room</button>
+    <button type="submit" [disabled]="!createRoomForm.valid">Create Room</button>
 </form>
