@@ -1,0 +1,13 @@
+<ul>
+    <li class="list-header">Users</li>
+    <li *ngFor="let user of users">
+        <p [ngClass]="{'': true, 'self': user.nickname === registration.getNickname()}">{{user.nickname}}</p>
+        <p class="tiny">{{user.points}} points</p>
+        <p class="tiny"># Right: {{user.questionsRight}}</p>
+        <p class="tiny"># Wrong: {{user.questionsWrong}}</p>
+        <p class="tiny">
+            {{user.questionsRight}} / {{user.questionsRight + user.questionsWrong}}
+            ({{(user.questionsRight / (user.questionsRight+user.questionsWrong)) | percent}})
+        </p>
+    </li>
+</ul>

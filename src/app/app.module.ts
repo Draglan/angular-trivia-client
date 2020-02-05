@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { UserListComponent } from './user-list/user-list.component';
+import { LobbyUserListComponent } from './user-list/lobby-user-list.component';
 import { RoomListComponent } from './room-list/room-list.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { TriviaRoomComponent } from './trivia-room/trivia-room.component';
@@ -16,6 +16,7 @@ import { RegistrationService } from './registration.service';
 import { CreateRoomComponent } from './create-room/create-room.component';
 import { DisconnectComponent } from './disconnect/disconnect.component';
 import { MaxLengthPipe } from '../core/max-length-pipe';
+import { GameUserListComponent } from './game-user-list/game-user-list.component';
 
 // Tells the socket.io service where to connect.
 const socketIoConfig: SocketIoConfig = 
@@ -27,7 +28,7 @@ const socketIoConfig: SocketIoConfig =
 @NgModule({
   declarations: [
     AppComponent,
-    UserListComponent,
+    LobbyUserListComponent,
     RoomListComponent,
     LobbyComponent,
     TriviaRoomComponent,
@@ -36,7 +37,8 @@ const socketIoConfig: SocketIoConfig =
     SelectNicknameComponent,
     CreateRoomComponent,
     DisconnectComponent,
-    MaxLengthPipe
+    MaxLengthPipe,
+    GameUserListComponent
   ],
   imports: [
     BrowserModule,

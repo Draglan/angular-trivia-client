@@ -1,0 +1,4 @@
+<ul>
+    <li class="list-header">Users</li>
+    <li [ngClass]="{'':true, 'self': user === registration.getNickname()}" *ngFor="let user of users | async">{{user}}</li>
+</ul>

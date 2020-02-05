@@ -1,20 +1,25 @@
-<div style="padding:0 1in; text-align:center">
-    <div *ngIf="(question$ | async) as q; else loadingQuestionBlock">
-        <h1>{{q.question}}</h1>
-        <div class="info-box">
-            <p *ngIf="(secondsLeft$ | async) as secondsLeft; else loadingSecondsBlock">{{secondsLeft}} seconds left</p>
-            <p>Category: {{q.categoryName | titlecase}}</p>
-            <p>Difficulty: {{q.difficulty | titlecase}}</p>
+<div style="display:flex;min-height:100%;">
+    <div style="padding:0 1in; text-align:center; flex-grow:1;">
+        <div *ngIf="(question$ | async) as q; else loadingQuestionBlock">
+            <h1>{{q.question}}</h1>
+            <div class="info-box">
+                <p *ngIf="(secondsLeft$ | async) as secondsLeft; else loadingSecondsBlock">{{secondsLeft}} seconds left</p>
+                <p>Category: {{q.categoryName | titlecase}}</p>
+                <p>Difficulty: {{q.difficulty | titlecase}}</p>
+            </div>
+            <button [ngClass]="{'answer-button': true, 'selected-answer': selectedAnswerIndex === i}"
+                *ngFor="let answer of q.answers; let i = index" (click)="selectAnswer(i)" [disabled]="selectedAnswerIndex != -1 && i != selectedAnswerIndex">{{answer}}</button>
         </div>
-        <button [ngClass]="{'answer-button': true, 'selected-answer': selectedAnswerIndex === i}"
-            *ngFor="let answer of q.answers; let i = index" (click)="selectAnswer(i)" [disabled]="selectedAnswerIndex != -1 && i != selectedAnswerIndex">{{answer}}</button>
+        <hr>
+        <app-chat #chatbox></app-chat>
+
+        <a class="lobby-link" routerLink="/lobby">Back</a>
     </div>
-    <hr>
-    <app-chat #chatbox></app-chat>
 
-    <a class="lobby-link" routerLink="/lobby">Back</a>
+    <div style="min-height: 100%;">
+        <app-game-user-list></app-game-user-list>
+    </div>
 </div>
-
 
 <ng-template #loadingQuestionBlock>
     <h1>Loading...</h1>

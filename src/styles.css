@@ -44,3 +44,12 @@ button:disabled, .answer-button:disabled {
     color: white;
     opacity: 100%;
 }
+
+.tiny {
+    font-size: 0.5em;
+}
+
+.self {
+    font-style: italic;
+    color: yellow;
+}

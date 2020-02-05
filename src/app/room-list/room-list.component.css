@@ -58,10 +58,6 @@ a > p {
     margin: 0;
 }
 
-.tiny {
-    font-size: 0.5em;
-}
-
 @keyframes slide-out {
     0% {
         width: 100%;

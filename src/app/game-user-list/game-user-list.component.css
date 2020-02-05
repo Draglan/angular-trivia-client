@@ -1,0 +1,30 @@
+ul {
+    display: block;
+    min-width: 216px;
+    height: 100%;
+    list-style-type: none;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding-left: 0;
+    background-image: linear-gradient(to top right, #5680e9, #8860d0);
+    color: white;
+    overflow-y: auto;
+    margin: 0;
+
+    box-shadow: 0px 0 25px #5680e9;
+}
+
+li:not(.list-header) {
+    padding: 0 20px;
+    transition: background-color 100ms;
+}
+
+.list-header {
+    font-family: 'Candara';
+    font-size: 1.5em;
+}
+
+li > p {
+    margin: 0;
+}
