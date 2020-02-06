@@ -11,7 +11,12 @@ import { RegistrationService } from '../registration.service';
 })
 export class CreateRoomComponent implements OnInit 
 {
+  minSeconds: number = 5;
+  maxSeconds: number = 300;
+  
   createRoomForm: FormGroup;
+  errorMessage: string = '';
+
   constructor
   (
     private questions: QuestionService, 
@@ -25,9 +30,11 @@ export class CreateRoomComponent implements OnInit
     this.createRoomForm = this.fb.group
     (
       {
-        name:       [`${this.registration.getNickname()}'s room`, Validators.required],
-        difficulty: ['', Validators.required],
-        category:   ['', Validators.required]
+        name:             [`${this.registration.getNickname()}'s room`, Validators.required],
+        maxSeconds:       ['30', Validators.required],
+        difficulty:       ['', Validators.required],
+        category:         ['', Validators.required],
+        canSkipQuestions: ['']
       }
     );
 
@@ -36,15 +43,23 @@ export class CreateRoomComponent implements OnInit
 
   onSubmit()
   {
-    if (!this.createRoomForm.valid) return;
+    if (!this.createRoomForm.valid) return
 
-    let difficulty: string = null;
-    let categoryId: number = null;
-    let name:       string = this.createRoomForm.value.name;
+    if (this.createRoomForm.value.maxSeconds < this.minSeconds || this.createRoomForm.value.maxSeconds > this.maxSeconds)
+    {
+      this.errorMessage = 'Please select between 5 and 300 seconds.';
+      return;
+    }
+
+    let difficulty: string  = null;
+    let categoryId: number  = null;
+    let name:       string  = this.createRoomForm.value.name;
+    let maxSeconds: number  = +this.createRoomForm.value.maxSeconds;
+    let canSkip:    boolean = this.createRoomForm.value.canSkipQuestions === true;
 
     if (this.createRoomForm.value.difficulty != 'any') difficulty = this.createRoomForm.value.difficulty;
     if (this.createRoomForm.value.category   != 'any') categoryId = +this.createRoomForm.value.category;
 
-    this.roomService.createRoom(name, categoryId, difficulty);
+    this.roomService.createRoom(name, categoryId, difficulty, maxSeconds, canSkip);
   }
 }

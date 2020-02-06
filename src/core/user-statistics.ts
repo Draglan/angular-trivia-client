@@ -5,8 +5,10 @@
 */
 export class UserStatistics
 {
-    nickname      : string;
-    points        : number;
-    questionsRight: number;
-    questionsWrong: number;
+    nickname           : string;
+    points             : number;
+    pointsChange       : number; // the change in points from the last round
+    questionsRight     : number;
+    questionsWrong     : number;
+    selectedAnswerIndex: number;
 }

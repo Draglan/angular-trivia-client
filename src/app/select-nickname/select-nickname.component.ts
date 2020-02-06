@@ -24,6 +24,12 @@ export class SelectNicknameComponent implements OnInit {
         nickname: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(16)])]
       }
     );
+
+    // Redirect to the previous url if they already have a nickname.
+    if (this.registration.getNickname().length > 0)
+    {
+      this.router.navigateByUrl(this.registration.getPreviousUrl());
+    }
   }
 
   onSubmit()
@@ -42,7 +48,7 @@ export class SelectNicknameComponent implements OnInit {
     switch (value)
     {
       case 'good nickname':
-        this.router.navigateByUrl('/lobby');
+        // nothing to do
         break;
 
       case 'invalid nickname':

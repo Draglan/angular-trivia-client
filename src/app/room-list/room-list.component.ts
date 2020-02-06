@@ -32,5 +32,7 @@ export class RoomListComponent implements OnInit
     this.rooms = this.roomService.rooms;
     this.roomService.enteredLobby.subscribe(_ => this.show());
     this.roomService.leftLobby.subscribe(_ => this.hide());
+    this.roomService.enteredGameRoom.subscribe(_ => this.hide());
+    this.roomService.leftGameRoom.subscribe(_ => this.hide());
   }
 }

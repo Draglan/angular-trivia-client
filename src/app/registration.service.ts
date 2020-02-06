@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { SelectNicknameComponent } from './select-nickname/select-nickname.component';
 
 @Injectable({
@@ -13,7 +13,8 @@ export class RegistrationService {
   disconnect: Observable<any>   = this.socket.fromEvent<any>('disconnect');
   connection: Observable<any>   = this.socket.fromEvent<any>('connection');
 
-  private nickname: string = '';
+  private nickname   : string = '';
+  private previousUrl: string = '';
 
   constructor(private socket: Socket, private router: Router, private activeRoute: ActivatedRoute)
   { 
@@ -21,11 +22,24 @@ export class RegistrationService {
     (
       _ =>
       {
+        // Apparently we don't have one, so reset it!
+        this.nickname = '';
         this.router.navigateByUrl('/nickname');
       }
     );
-
+    
     this.disconnect.subscribe(() => this.router.navigateByUrl('/disconnect'));
+
+    this.router.events.subscribe
+    (
+      event =>
+      {
+        if (event instanceof NavigationStart)
+        {
+          this.previousUrl = this.router.url;
+        }
+      }
+    );
   }
 
   // Tells the server to give us the given nickname.
@@ -51,5 +65,11 @@ export class RegistrationService {
   getNickname(): string
   {
     return this.nickname;
+  }
+
+  // Get the previous URL the user was at.
+  getPreviousUrl(): string
+  {
+    return this.previousUrl;
   }
 }

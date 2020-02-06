@@ -1,7 +1,12 @@
 <form [formGroup]="createRoomForm" (ngSubmit)="onSubmit()" class="create-room-form">
     <h1>Create Room</h1>
+    <div *ngIf="errorMessage.length > 0" class="alert alert-danger">{{errorMessage}}</div>
+
     <label for="name">Room Name:</label>
     <input type="text" formControlName="name" class="form-control">
+
+    <label for="maxSeconds">Seconds per question:</label>
+    <input type="text" formControlName="maxSeconds" class="form-control" placeholder="Enter a value between 5 and 300 seconds...">
 
     <label for="category">Select Category:</label>
     <select formControlName="category" class="form-control">
@@ -16,6 +21,9 @@
         <option value="medium">Medium</option>
         <option value="hard">Hard</option>
     </select>
+
+    <label for="canSkipQuestions">Can users skip questions?&nbsp;</label>
+    <input formControlName="canSkipQuestions" type="checkbox" [value]="true" style="vertical-align: middle;">
 
     <button type="submit" [disabled]="!createRoomForm.valid">Create Room</button>
 </form>

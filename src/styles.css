@@ -17,6 +17,11 @@ button, .lobby-link {
     font-size: 1.75em;
 }
 
+.answer-button .material-icons {
+    font-size: 36px;
+    vertical-align: text-bottom;
+}
+
 button:hover:not(:disabled), .lobby-link:hover {
     background-color: #6d5894;
 }
@@ -47,6 +52,10 @@ button:disabled, .answer-button:disabled {
 
 .tiny {
     font-size: 0.5em;
+}
+
+.small {
+    font-size: 0.8em;
 }
 
 .self {

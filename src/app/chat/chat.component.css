@@ -39,7 +39,7 @@
     padding: 0 10px;
 }
 
-.chatbox li:not(.question-correct):not(.question-incorrect):nth-child(even) {
+.chatbox li:not(.question-correct):not(.question-incorrect):not(.question-skipped):nth-child(even) {
     background-color: #efefef;
 }
 
@@ -50,7 +50,12 @@
 
 .question-incorrect {
     border-left: 5px solid #ec3c3c;
-    background-color: #f3b4b4;
+    background-color: #f3d9d9;
+}
+
+.question-skipped {
+    border-left: 5px solid yellow;
+    background-color: #ffffc8;
 }
 
 .header {
@@ -61,7 +66,7 @@
 .message {
     margin-top: 0;
     margin-bottom: 0px;
-    margin-left: 24px;
+    margin-left: 0px;
 }
 
 .log-message {

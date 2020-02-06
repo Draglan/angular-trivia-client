@@ -28,3 +28,14 @@ li:not(.list-header) {
 li > p {
     margin: 0;
 }
+
+.material-icons {
+    font-size: 24px;
+    vertical-align: middle;
+}
+
+.points-change {
+    font-style: normal;
+    color: white;
+    font-size: 1.0em;
+}

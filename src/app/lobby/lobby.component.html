@@ -1,8 +1,8 @@
 <div style="display:flex;min-height:100%;">
     <div class="lobby-view" style="flex-grow:1;">
         <h1>Lobby</h1>
-        <p class="lead" *ngIf="(roomService.rooms | async) as rooms">{{rooms.length}} active games</p>
-        <button class="answer-button" (click)="showNewRoomForm()">Create Room</button>
+        <p class="lead" *ngIf="(roomService.rooms | async) as rooms">{{rooms.length}} active game(s)</p>
+        <button class="answer-button" (click)="showNewRoomForm()"><i class="material-icons">add</i>Create Room</button>
 
         <app-chat></app-chat>
 

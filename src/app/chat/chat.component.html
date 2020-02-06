@@ -1,9 +1,10 @@
 <div>
     <ul class="chatbox" #chatbox>
-        <li *ngFor="let message of messages" [ngClass]="{'': true, 'question-correct': message.type === MessageType.QuestionCorrect, 'question-incorrect': message.type === MessageType.QuestionIncorrect}">
+        <li *ngFor="let message of messages" [ngClass]="{'': true, 'question-correct': message.type === MessageType.QuestionCorrect, 'question-incorrect': message.type === MessageType.QuestionIncorrect, 'question-skipped': message.type === MessageType.QuestionSkipped}">
             <ng-container *ngIf="message.type === MessageType.Message; then chatMessage"></ng-container>
             <ng-container *ngIf="message.type === MessageType.QuestionCorrect; then questionCorrect"></ng-container>
             <ng-container *ngIf="message.type === MessageType.QuestionIncorrect; then questionIncorrect"></ng-container>
+            <ng-container *ngIf="message.type === MessageType.QuestionSkipped; then questionSkipped"></ng-container>
             <ng-container *ngIf="message.type === MessageType.Log; then log"></ng-container>
 
             <ng-template #chatMessage>
@@ -17,6 +18,11 @@
             </ng-template>
 
             <ng-template #questionIncorrect>
+                <p class="header">{{message.header}}</p>
+                <p class="message">{{message.message}}</p>
+            </ng-template>
+
+            <ng-template #questionSkipped>
                 <p class="header">{{message.header}}</p>
                 <p class="message">{{message.message}}</p>
             </ng-template>

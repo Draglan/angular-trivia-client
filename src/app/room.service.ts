@@ -141,8 +141,18 @@ export class RoomService implements OnDestroy
   }
 
   // Tell the server we want to create a new room.
-  createRoom(name: string, categoryId: number = null, difficulty: string = null)
+  createRoom(name: string, categoryId: number = null, difficulty: string = null, maxSeconds: number = 30, canSkipQuestions: boolean = false)
   {
-    this.socket.emit('create room', {name: name, categoryId: categoryId, difficulty: difficulty});
+    this.socket.emit
+    (
+      'create room', 
+      {
+        name: name, 
+        categoryId: categoryId,
+        difficulty: difficulty, 
+        maxSeconds: maxSeconds, 
+        canSkipQuestions: canSkipQuestions
+      }
+    );
   }
 }

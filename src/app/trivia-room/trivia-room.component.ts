@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ChatComponent } from '../chat/chat.component';
 import { ChatMessage, MessageType } from '../../core/chat-message';
+import { AnswerResult } from '../../core/answer-result';
 
 @Component({
   selector: 'app-trivia-room',
@@ -20,10 +21,11 @@ export class TriviaRoomComponent implements OnInit {
 
   id: string;
   question$: Observable<TriviaQuestion>;
-  secondsLeft$: Observable<number>;
+  secondsLeft$: Observable<string>;
   selectedAnswerIndex: number = -1;
 
   private currentQuestion: TriviaQuestion;
+  acceptAnswer: boolean = true;
 
   constructor
   (
@@ -65,10 +67,18 @@ export class TriviaRoomComponent implements OnInit {
       )
     );
 
-    this.question$.subscribe(q => this.currentQuestion = q);
+    this.question$.subscribe
+    (
+      q => 
+      {
+        this.currentQuestion = q;
+        this.acceptAnswer    = true;
+      }
+    );
 
-    // The number of seconds left on the current question.
-    this.secondsLeft$ = this.questions.secondsLeft;
+    // The number of seconds left on the current question. Mapped to a string
+    // so that "0" will display without being evaluated to false in the template.
+    this.secondsLeft$ = this.questions.secondsLeft.pipe(map(s => s.toString()));
 
     // Deselect the currently selected answer when we receive the correct answer.
     this.questions.wasCorrect.subscribe
@@ -79,15 +89,20 @@ export class TriviaRoomComponent implements OnInit {
         let msg = `Correct answer: ${this.currentQuestion.answers[this.currentQuestion.correctAnswerIndex]}`;
         msg    += ` (You chose: ${this.currentQuestion.answers[this.selectedAnswerIndex] || 'No selection'})`;
 
-        if (q)
+        if (q === AnswerResult.Correct)
           this.chatbox.messages.push(new ChatMessage(this.currentQuestion.question, msg, MessageType.QuestionCorrect));
-        else
+        else if (q === AnswerResult.Incorrect)
           this.chatbox.messages.push(new ChatMessage(this.currentQuestion.question, msg, MessageType.QuestionIncorrect));
+        else
+          this.chatbox.messages.push(new ChatMessage(this.currentQuestion.question, msg, MessageType.QuestionSkipped));
 
         // Unselect the answer.
         this.selectedAnswerIndex = -1;
       }
     );
+
+    // Called when the answering period for the current question ends.
+    this.questions.endQuestion.subscribe(() => this.acceptAnswer = false);
   }
 
   ngOnDestroy()

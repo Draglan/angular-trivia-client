@@ -3,6 +3,7 @@ export enum MessageType
     Message = 1,
     QuestionCorrect,
     QuestionIncorrect,
+    QuestionSkipped,
     Log
 }
 
