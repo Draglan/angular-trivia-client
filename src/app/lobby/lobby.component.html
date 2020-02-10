@@ -6,9 +6,9 @@
 
         <app-chat></app-chat>
 
-        <div class="popup-form" #formdisplay>
+        <div class="popup-form" #formdisplay [@fade]="showForm ? 'in' : 'out'" (@fade.done)="fadeEnd($event)" (@fade.start)="fadeStart($event)">
             <app-create-room #createRoomForm></app-create-room>
-            <button class="popup-x-button" (click)="hideNewRoomForm()">X</button>
+            <button class="popup-x-button" (click)="hideNewRoomForm()">X</button>    
         </div>
     </div>
 

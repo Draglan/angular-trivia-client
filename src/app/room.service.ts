@@ -1,9 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
-import { Observable, of, Subject, Subscription, BehaviorSubject } from 'rxjs';
-import { merge, switchMap } from 'rxjs/operators';
-import { Router, NavigationEnd, ActivatedRoute, NavigationStart, DefaultUrlSerializer } from '@angular/router';
-import { RoomConfiguration } from '../core/room-configuration';
+import { Observable, Subject, Subscription, BehaviorSubject } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 import { RoomInformation } from '../core/room-info';
 import { UserStatistics } from '../core/user-statistics';
 
@@ -25,6 +23,7 @@ export class RoomService implements OnDestroy
   newRoom        : Observable<RoomInformation>     = this.socket.fromEvent<RoomInformation>  ('new room');
   deleteRoom     : Observable<RoomInformation>     = this.socket.fromEvent<RoomInformation>  ('delete room');
   updateRoom     : Observable<RoomInformation>     = this.socket.fromEvent<RoomInformation>  ('update room');
+  gameOver       : Observable<UserStatistics[]>    = this.socket.fromEvent<UserStatistics[]> ('game over');
 
   // Subscribe to this to get a stream of all of the users in the current room.
   users: Subject<string[]> = new BehaviorSubject<string[]>([]);
@@ -141,7 +140,7 @@ export class RoomService implements OnDestroy
   }
 
   // Tell the server we want to create a new room.
-  createRoom(name: string, categoryId: number = null, difficulty: string = null, maxSeconds: number = 30, canSkipQuestions: boolean = false)
+  createRoom(name: string, categoryId: number = null, difficulty: string = null, maxSeconds: number = 30, canSkipQuestions: boolean = false, questionCount: number = 0)
   {
     this.socket.emit
     (
@@ -151,7 +150,8 @@ export class RoomService implements OnDestroy
         categoryId: categoryId,
         difficulty: difficulty, 
         maxSeconds: maxSeconds, 
-        canSkipQuestions: canSkipQuestions
+        canSkipQuestions: canSkipQuestions,
+        questionCount: questionCount
       }
     );
   }

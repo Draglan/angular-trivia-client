@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { LobbyUserListComponent } from './user-list/lobby-user-list.component';
@@ -21,7 +22,7 @@ import { GameUserListComponent } from './game-user-list/game-user-list.component
 // Tells the socket.io service where to connect.
 const socketIoConfig: SocketIoConfig = 
 {
-  url: 'http://localhost:3000', 
+  url: 'http://localhost:3000',
   options: {}
 };
 
@@ -44,7 +45,8 @@ const socketIoConfig: SocketIoConfig =
     BrowserModule,
     AppRoutingModule,
     SocketIoModule.forRoot(socketIoConfig),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

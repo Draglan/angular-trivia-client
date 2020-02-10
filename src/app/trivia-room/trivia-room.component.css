@@ -24,3 +24,17 @@ h1 {
 .info-box > p {
     margin-bottom: 0;
 }
+
+.gameover-box {
+    display: inline-block;
+    background-color: rgba(136, 96, 208, 0.3);
+    min-width: 216px;
+    padding: 16px;
+    border-radius: 10px;
+}
+
+.gameover-list {
+    margin: 0;
+    color: white;
+    font-size: 1.5em;
+}

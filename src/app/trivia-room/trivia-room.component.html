@@ -1,14 +1,17 @@
 <div style="display:flex;min-height:100%;">
     <div style="padding:0 1in; text-align:center; flex-grow:1;">
-        <div *ngIf="(question$ | async) as q; else loadingQuestionBlock">
-            <h1>{{q.question}}</h1>
-            <div class="info-box">
-                <p *ngIf="secondsLeft$ | async as secondsLeft; else loadingSecondsBlock"><i class="material-icons" style="vertical-align:text-bottom;font-size:36px;">timer</i>{{secondsLeft}}s</p>
-                <p>Category: {{q.categoryName | titlecase}}</p>
-                <p>Difficulty: {{q.difficulty | titlecase}}</p>
+        <div *ngIf="!isGameOver; else gameOverBlock">
+            <div *ngIf="(question$ | async) as q; else loadingQuestionBlock">
+                <h1>{{q.question}}</h1>
+                <div class="info-box">
+                    <p *ngIf="secondsLeft$ | async as secondsLeft; else loadingSecondsBlock"><i class="material-icons" style="vertical-align:text-bottom;font-size:36px;">timer</i>{{secondsLeft}}s</p>
+                    <p class="small">Question {{q.questionNumber}} <span *ngIf="q.questionCount > 0">of {{q.questionCount}}</span></p>
+                    <p class="small">Category: {{q.categoryName | titlecase}}</p>
+                    <p class="small">Difficulty: {{q.difficulty | titlecase}}</p>
+                </div>
+                <button [ngClass]="{'answer-button': true, 'selected-answer': selectedAnswerIndex === i}"
+                    *ngFor="let answer of q.answers; let i = index" (click)="selectAnswer(i)" [disabled]="(selectedAnswerIndex != -1 && i != selectedAnswerIndex) || !acceptAnswer">{{answer}}</button>
             </div>
-            <button [ngClass]="{'answer-button': true, 'selected-answer': selectedAnswerIndex === i}"
-                *ngFor="let answer of q.answers; let i = index" (click)="selectAnswer(i)" [disabled]="(selectedAnswerIndex != -1 && i != selectedAnswerIndex) || !acceptAnswer">{{answer}}</button>
         </div>
         <hr>
         <app-chat #chatbox></app-chat>
@@ -27,4 +30,15 @@
 
 <ng-template #loadingSecondsBlock>
     <p>Waiting...</p>
+</ng-template>
+
+<ng-template #gameOverBlock>
+    <h1>Game Over</h1>
+    <div class="gameover-box">
+        <ol class="gameover-list">
+            <li *ngFor="let user of gameOverStats">
+                {{user.nickname}} ({{user.points}} points)
+            </li>
+        </ol>
+    </div>
 </ng-template>

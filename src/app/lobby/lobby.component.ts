@@ -3,11 +3,27 @@ import { RoomListComponent } from '../room-list/room-list.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RoomService } from '../room.service';
 import { CreateRoomComponent } from '../create-room/create-room.component';
+import { trigger, state, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-lobby',
   templateUrl: './lobby.component.html',
-  styleUrls: ['./lobby.component.css']
+  styleUrls: ['./lobby.component.css'],
+  animations: [
+    trigger('fade', [
+      state('in', style({
+        opacity: 1
+      })),
+
+      state('out', style({
+        opacity: 0
+      })),
+
+      transition('out <=> in', [
+        animate('100ms')
+      ])
+    ])
+  ]
 })
 export class LobbyComponent implements OnInit 
 { 
@@ -16,6 +32,8 @@ export class LobbyComponent implements OnInit
   
   @ViewChild('formdisplay', {static: false})
   formDisplay: ElementRef;
+
+  showForm: boolean = false;
 
   constructor
   (
@@ -42,12 +60,27 @@ export class LobbyComponent implements OnInit
 
   showNewRoomForm()
   {
-    this.formDisplay.nativeElement.style.display = 'inherit';
+    this.showForm = true;
   }
 
   hideNewRoomForm()
   {
-    this.popupForm.createRoomForm.reset();
-    this.formDisplay.nativeElement.style.display = 'none';
+    this.showForm = false;
+  }
+
+  fadeEnd(event)
+  {
+    if (event.fromState === 'in')
+    {
+      this.formDisplay.nativeElement.style.display = 'none';
+    }
+  }
+
+  fadeStart(event)
+  {
+    if (event.fromState === 'out')
+    {
+      this.formDisplay.nativeElement.style.display = 'inherit';
+    }
   }
 }

@@ -21,7 +21,10 @@ ul {
 
 .list-shrunk {
     width: 0px;
-    color: rgba(0,0,0,0);
+}
+
+.list-shrunk > * {
+    display: none;
 }
 
 .list-header {

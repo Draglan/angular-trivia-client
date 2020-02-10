@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { ChatComponent } from '../chat/chat.component';
 import { ChatMessage, MessageType } from '../../core/chat-message';
 import { AnswerResult } from '../../core/answer-result';
+import { UserStatistics } from '../../core/user-statistics';
 
 @Component({
   selector: 'app-trivia-room',
@@ -23,6 +24,8 @@ export class TriviaRoomComponent implements OnInit {
   question$: Observable<TriviaQuestion>;
   secondsLeft$: Observable<string>;
   selectedAnswerIndex: number = -1;
+  isGameOver: boolean = false;
+  gameOverStats: UserStatistics[] = [];
 
   private currentQuestion: TriviaQuestion;
   acceptAnswer: boolean = true;
@@ -103,6 +106,16 @@ export class TriviaRoomComponent implements OnInit {
 
     // Called when the answering period for the current question ends.
     this.questions.endQuestion.subscribe(() => this.acceptAnswer = false);
+
+    // Called when the game is finished.
+    this.roomService.gameOver.subscribe
+    (
+      stats =>
+      {
+        this.isGameOver = true;
+        this.gameOverStats = stats;
+      }
+    );
   }
 
   ngOnDestroy()

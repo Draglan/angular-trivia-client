@@ -1,29 +1,38 @@
 <form [formGroup]="createRoomForm" (ngSubmit)="onSubmit()" class="create-room-form">
     <h1>Create Room</h1>
-    <div *ngIf="errorMessage.length > 0" class="alert alert-danger">{{errorMessage}}</div>
+
+    <div class="alert alert-danger" *ngIf="createRoomForm.get('numQuestions').errors">Choose between 1 and 1000
+        questions, or 0 if you want an infinite number of questions.</div>
+    <div class="alert alert-danger" *ngIf="createRoomForm.get('secsPerQuestion').errors">Choose between 5 and 300
+        seconds per question.</div>
 
     <label for="name">Room Name:</label>
-    <input type="text" formControlName="name" class="form-control">
+    <input id="name" type="text" formControlName="name" class="form-control">
 
-    <label for="maxSeconds">Seconds per question:</label>
-    <input type="text" formControlName="maxSeconds" class="form-control" placeholder="Enter a value between 5 and 300 seconds...">
+    <label for="numQuestions">Number of questions:</label>
+    <input id="numQuestions" type="number" formControlName="numQuestions" class="form-control"
+        placeholder="Leave blank for infinite">
+
+    <label for="secsPerQuestion">Seconds per question:</label>
+    <input id="secsPerQuestion" type="number" formControlName="secsPerQuestion" class="form-control">
 
     <label for="category">Select Category:</label>
-    <select formControlName="category" class="form-control">
+    <select id="category" formControlName="category" class="form-control">
         <option value="any">Any</option>
         <option *ngFor="let category of questions.categories | async" [value]="category.id">{{category.name}}</option>
     </select>
 
     <label for="difficulty">Select Difficulty:</label>
-    <select formControlName="difficulty" class="form-control">
+    <select id="difficulty" formControlName="difficulty" class="form-control">
         <option value="any">Any</option>
         <option value="easy">Easy</option>
         <option value="medium">Medium</option>
         <option value="hard">Hard</option>
     </select>
 
-    <label for="canSkipQuestions">Can users skip questions?&nbsp;</label>
-    <input formControlName="canSkipQuestions" type="checkbox" [value]="true" style="vertical-align: middle;">
+    <label for="canSkipQuestions">Can users skip questions?&nbsp; </label>
+    <input id="canSkipQuestions" formControlName="canSkipQuestions" type="checkbox" [value]="true"
+        style="vertical-align: middle;">
 
     <button type="submit" [disabled]="!createRoomForm.valid">Create Room</button>
 </form>
